@@ -29,10 +29,16 @@ def bzip_reader(filename):
     p = subprocess.Popen(['bunzip2', '-c', filename], bufsize=-1, stdout=subprocess.PIPE)
     return p.stdout
 
+def gzip_reader(filename):
+    p = subprocess.Popen(['gunzip', '-c', filename], bufsize=-1, stdout=subprocess.PIPE)
+    return p.stdout
+
 @contextlib.contextmanager
 def fileinput(filename):
     if filename.endswith('bz2'):
         yield bzip_reader(filename)
+    elif filename.endswith('gz'):
+        yield gzip_reader(filename)
     else:
         fh = open(filename, 'rb')
         yield fh
@@ -42,6 +48,8 @@ def estimate_records(files):
     records = 0
     for f in files:
         fsize = os.path.getsize(f)
+        if f.endswith('.gz'):
+            fsize *= 9 # observed gzip compression factor on osm data
         if f.endswith('.bz2'):
             fsize *= 11 # observed bzip2 compression factor on osm data
         if f.endswith('.pbf'):

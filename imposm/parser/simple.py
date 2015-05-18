@@ -60,7 +60,9 @@ class OSMParser(object):
         """
         if filename.endswith('.pbf'):
             return self.parse_pbf_file(filename)
-        elif filename.endswith(('.osm', '.osm.bz2')):
+        elif filename.endswith(('.osc')):
+            return self.parse_xml_osc_file(filename)
+        elif filename.endswith(('.osm', '.osm.gz', '.osm.bz2')):
             return self.parse_xml_file(filename)
         else:
             raise NotImplementedError('unknown file extension')
@@ -72,10 +74,27 @@ class OSMParser(object):
         from imposm.parser.pbf.multiproc import PBFMultiProcParser
         return self._parse(filename, PBFMultiProcParser)
     
+    def parse_xml_osc_file(self, filename):
+        """
+        Parse a XML file in OSM change format.
+        Single threaded
+        """
+        from imposm.parser.xml.parser import XMLParser
+        parser = XMLParser(coords_callback=self.coords_callback,
+                           nodes_callback=self.nodes_callback,
+                           ways_callback=self.ways_callback,
+                           relations_callback=self.relations_callback)
+        parser.nodes_tag_filter = self.nodes_tag_filter
+        parser.ways_tag_filter = self.ways_tag_filter
+        parser.relations_tag_filter = self.relations_tag_filter
+        parser.marshal_elem_data = self.marshal_elem_data
+        parser.parse(filename)
+
     def parse_xml_file(self, filename):
         """
         Parse a XML file.
         Supports BZip2 compressed files if the filename ends with ``.bz2``.
+        Supports gzip compressed files if the filename ends with ``.gz``.
         """
         from imposm.parser.xml.multiproc import XMLMultiProcParser
         with fileinput(filename) as input:
