@@ -21,6 +21,7 @@ import zlib
 from marshal import dumps
 
 from imposm.parser.pbf import OSMPBF
+from imposm.parser.diff import *
 
 SUPPORTED_FEATURES = set(['OsmSchema-V0.6', 'DenseNodes'])
 
@@ -86,14 +87,14 @@ class PBFParser(object):
                     self.nodes_tag_filter(node[1])
                 if node[1]:
                     if self.marshal:
-                        nodes.append((node[0], dumps((node[1], node[2]), 2)))
+                        nodes.append((node[0], dumps((node[1], node[2]), 2), OSMDiff.create))
                     else:
-                        nodes.append((node[0], node[1], node[2]))
+                        nodes.append((node[0], node[1], node[2], OSMDiff.create))
                 if len(nodes) >= 256:
                     nodes_callback(nodes)
                     nodes = []
             if coords_callback:
-                coords.append((node[0], node[2][0], node[2][1]))
+                coords.append((node[0], node[2][0], node[2][1], OSMDiff.create))
                 if len(coords) >= 512:
                     coords_callback(coords)
                     coords = []
@@ -109,9 +110,9 @@ class PBFParser(object):
                 self.ways_tag_filter(way[1])
             # always return ways, might be needed for relations
             if self.marshal:
-                ways.append((way[0], dumps((way[1], way[2]), 2)))
+                ways.append((way[0], dumps((way[1], way[2]), 2), OSMDiff.create))
             else:
-                ways.append((way[0], way[1], way[2]))
+                ways.append((way[0], way[1], way[2], OSMDiff.create))
             if len(ways) >= 256:
                 self.ways_callback(ways)
                 ways = []
@@ -125,9 +126,9 @@ class PBFParser(object):
                 if not relation[1]:
                     continue
             if self.marshal:
-                relations.append((relation[0], dumps((relation[1], relation[2]), 2)))
+                relations.append((relation[0], dumps((relation[1], relation[2]), 2), OSMDiff.create))
             else:
-                relations.append((relation[0], relation[1], relation[2]))
+                relations.append((relation[0], relation[1], relation[2], OSMDiff.create))
             if len(relations) >= 256:
                 self.relations_callback(relations)
                 relations = []
