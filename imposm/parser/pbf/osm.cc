@@ -61,7 +61,7 @@ fastpb_convert9(const ::std::string &value)
 static PyObject *
 fastpb_convert12(const ::std::string &value)
 {
-    return PyString_FromStringAndSize(value.data(), value.length());
+    return PyBytes_FromStringAndSize(value.data(), value.length());
 }
 
 static PyObject *
@@ -90,7 +90,7 @@ fastpb_convert14(int value)
   Blob_dealloc(Blob* self)
   {
       delete self->protobuf;
-      self->ob_type->tp_free((PyObject*)self);
+      Py_TYPE(self)->tp_free((PyObject*)self);
   }
 
   static PyObject *
@@ -110,14 +110,14 @@ fastpb_convert14(int value)
   {
       std::string result;
       self->protobuf->SerializeToString(&result);
-      return PyString_FromStringAndSize(result.data(), result.length());
+      return PyBytes_FromStringAndSize(result.data(), result.length());
   }
 
 
   static PyObject *
   Blob_ParseFromString(Blob* self, PyObject *value)
   {
-      std::string serialized(PyString_AsString(value), PyString_Size(value));
+      std::string serialized(PyBytes_AsString(value), PyBytes_Size(value));
       self->protobuf->ParseFromString(serialized);
       Py_RETURN_NONE;
   }
@@ -155,12 +155,12 @@ fastpb_convert14(int value)
 
       
         // string
-        if (! PyString_Check(value)) {
+        if (! PyBytes_Check(value)) {
           PyErr_SetString(PyExc_TypeError, "The raw attribute value must be a string");
           return -1;
         }
 
-        std::string protoValue(PyString_AsString(value), PyString_Size(value));
+        std::string protoValue(PyBytes_AsString(value), PyBytes_Size(value));
 
       
 
@@ -206,8 +206,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int32 protoValue;
 
         // int32
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else {
           PyErr_SetString(PyExc_TypeError,
                           "The raw_size attribute value must be an integer");
@@ -256,12 +256,12 @@ fastpb_convert14(int value)
 
       
         // string
-        if (! PyString_Check(value)) {
+        if (! PyBytes_Check(value)) {
           PyErr_SetString(PyExc_TypeError, "The zlib_data attribute value must be a string");
           return -1;
         }
 
-        std::string protoValue(PyString_AsString(value), PyString_Size(value));
+        std::string protoValue(PyBytes_AsString(value), PyBytes_Size(value));
 
       
 
@@ -305,12 +305,12 @@ fastpb_convert14(int value)
 
       
         // string
-        if (! PyString_Check(value)) {
+        if (! PyBytes_Check(value)) {
           PyErr_SetString(PyExc_TypeError, "The lzma_data attribute value must be a string");
           return -1;
         }
 
-        std::string protoValue(PyString_AsString(value), PyString_Size(value));
+        std::string protoValue(PyBytes_AsString(value), PyBytes_Size(value));
 
       
 
@@ -354,12 +354,12 @@ fastpb_convert14(int value)
 
       
         // string
-        if (! PyString_Check(value)) {
+        if (! PyBytes_Check(value)) {
           PyErr_SetString(PyExc_TypeError, "The OBSOLETE_bzip2_data attribute value must be a string");
           return -1;
         }
 
-        std::string protoValue(PyString_AsString(value), PyString_Size(value));
+        std::string protoValue(PyBytes_AsString(value), PyBytes_Size(value));
 
       
 
@@ -493,8 +493,7 @@ fastpb_convert14(int value)
 
 
   static PyTypeObject BlobType = {
-      PyObject_HEAD_INIT(NULL)
-      0,                                      /*ob_size*/
+      PyVarObject_HEAD_INIT(NULL, 0)  /*ob_size*/
       "OSMPBF.Blob",  /*tp_name*/
       sizeof(Blob),             /*tp_basicsize*/
       0,                                      /*tp_itemsize*/
@@ -545,7 +544,7 @@ fastpb_convert14(int value)
   BlobHeader_dealloc(BlobHeader* self)
   {
       delete self->protobuf;
-      self->ob_type->tp_free((PyObject*)self);
+      Py_TYPE(self)->tp_free((PyObject*)self);
   }
 
   static PyObject *
@@ -565,14 +564,14 @@ fastpb_convert14(int value)
   {
       std::string result;
       self->protobuf->SerializeToString(&result);
-      return PyString_FromStringAndSize(result.data(), result.length());
+      return PyBytes_FromStringAndSize(result.data(), result.length());
   }
 
 
   static PyObject *
   BlobHeader_ParseFromString(BlobHeader* self, PyObject *value)
   {
-      std::string serialized(PyString_AsString(value), PyString_Size(value));
+      std::string serialized(PyBytes_AsString(value), PyBytes_Size(value));
       self->protobuf->ParseFromString(serialized);
       Py_RETURN_NONE;
   }
@@ -614,12 +613,12 @@ fastpb_convert14(int value)
           value = PyUnicode_AsEncodedString(value, "utf-8", NULL);
         }
 
-        if (! PyString_Check(value)) {
+        if (! PyBytes_Check(value)) {
           PyErr_SetString(PyExc_TypeError, "The type attribute value must be a string");
           return -1;
         }
 
-        std::string protoValue(PyString_AsString(value), PyString_Size(value));
+        std::string protoValue(PyBytes_AsString(value), PyBytes_Size(value));
 
       
 
@@ -663,12 +662,12 @@ fastpb_convert14(int value)
 
       
         // string
-        if (! PyString_Check(value)) {
+        if (! PyBytes_Check(value)) {
           PyErr_SetString(PyExc_TypeError, "The indexdata attribute value must be a string");
           return -1;
         }
 
-        std::string protoValue(PyString_AsString(value), PyString_Size(value));
+        std::string protoValue(PyBytes_AsString(value), PyBytes_Size(value));
 
       
 
@@ -714,8 +713,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int32 protoValue;
 
         // int32
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else {
           PyErr_SetString(PyExc_TypeError,
                           "The datasize attribute value must be an integer");
@@ -824,8 +823,7 @@ fastpb_convert14(int value)
 
 
   static PyTypeObject BlobHeaderType = {
-      PyObject_HEAD_INIT(NULL)
-      0,                                      /*ob_size*/
+      PyVarObject_HEAD_INIT(NULL, 0)  /*ob_size*/
       "OSMPBF.BlobHeader",  /*tp_name*/
       sizeof(BlobHeader),             /*tp_basicsize*/
       0,                                      /*tp_itemsize*/
@@ -876,7 +874,7 @@ fastpb_convert14(int value)
   HeaderBBox_dealloc(HeaderBBox* self)
   {
       delete self->protobuf;
-      self->ob_type->tp_free((PyObject*)self);
+      Py_TYPE(self)->tp_free((PyObject*)self);
   }
 
   static PyObject *
@@ -896,14 +894,14 @@ fastpb_convert14(int value)
   {
       std::string result;
       self->protobuf->SerializeToString(&result);
-      return PyString_FromStringAndSize(result.data(), result.length());
+      return PyBytes_FromStringAndSize(result.data(), result.length());
   }
 
 
   static PyObject *
   HeaderBBox_ParseFromString(HeaderBBox* self, PyObject *value)
   {
-      std::string serialized(PyString_AsString(value), PyString_Size(value));
+      std::string serialized(PyBytes_AsString(value), PyBytes_Size(value));
       self->protobuf->ParseFromString(serialized);
       Py_RETURN_NONE;
   }
@@ -943,8 +941,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int64 protoValue;
 
         // int64
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsLongLong(value);
         } else {
@@ -997,8 +995,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int64 protoValue;
 
         // int64
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsLongLong(value);
         } else {
@@ -1051,8 +1049,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int64 protoValue;
 
         // int64
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsLongLong(value);
         } else {
@@ -1105,8 +1103,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int64 protoValue;
 
         // int64
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsLongLong(value);
         } else {
@@ -1232,8 +1230,7 @@ fastpb_convert14(int value)
 
 
   static PyTypeObject HeaderBBoxType = {
-      PyObject_HEAD_INIT(NULL)
-      0,                                      /*ob_size*/
+      PyVarObject_HEAD_INIT(NULL, 0)  /*ob_size*/
       "OSMPBF.HeaderBBox",  /*tp_name*/
       sizeof(HeaderBBox),             /*tp_basicsize*/
       0,                                      /*tp_itemsize*/
@@ -1284,7 +1281,7 @@ fastpb_convert14(int value)
   HeaderBlock_dealloc(HeaderBlock* self)
   {
       delete self->protobuf;
-      self->ob_type->tp_free((PyObject*)self);
+      Py_TYPE(self)->tp_free((PyObject*)self);
   }
 
   static PyObject *
@@ -1304,14 +1301,14 @@ fastpb_convert14(int value)
   {
       std::string result;
       self->protobuf->SerializeToString(&result);
-      return PyString_FromStringAndSize(result.data(), result.length());
+      return PyBytes_FromStringAndSize(result.data(), result.length());
   }
 
 
   static PyObject *
   HeaderBlock_ParseFromString(HeaderBlock* self, PyObject *value)
   {
-      std::string serialized(PyString_AsString(value), PyString_Size(value));
+      std::string serialized(PyBytes_AsString(value), PyBytes_Size(value));
       self->protobuf->ParseFromString(serialized);
       Py_RETURN_NONE;
   }
@@ -1401,7 +1398,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The required_features attribute value must be a sequence");
           return -1;
         }
@@ -1418,12 +1415,12 @@ fastpb_convert14(int value)
           value = PyUnicode_AsEncodedString(value, "utf-8", NULL);
         }
 
-        if (! PyString_Check(value)) {
+        if (! PyBytes_Check(value)) {
           PyErr_SetString(PyExc_TypeError, "The required_features attribute value must be a string");
           return -1;
         }
 
-        std::string protoValue(PyString_AsString(value), PyString_Size(value));
+        std::string protoValue(PyBytes_AsString(value), PyBytes_Size(value));
 
       
 
@@ -1467,7 +1464,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The optional_features attribute value must be a sequence");
           return -1;
         }
@@ -1484,12 +1481,12 @@ fastpb_convert14(int value)
           value = PyUnicode_AsEncodedString(value, "utf-8", NULL);
         }
 
-        if (! PyString_Check(value)) {
+        if (! PyBytes_Check(value)) {
           PyErr_SetString(PyExc_TypeError, "The optional_features attribute value must be a string");
           return -1;
         }
 
-        std::string protoValue(PyString_AsString(value), PyString_Size(value));
+        std::string protoValue(PyBytes_AsString(value), PyBytes_Size(value));
 
       
 
@@ -1540,12 +1537,12 @@ fastpb_convert14(int value)
           value = PyUnicode_AsEncodedString(value, "utf-8", NULL);
         }
 
-        if (! PyString_Check(value)) {
+        if (! PyBytes_Check(value)) {
           PyErr_SetString(PyExc_TypeError, "The writingprogram attribute value must be a string");
           return -1;
         }
 
-        std::string protoValue(PyString_AsString(value), PyString_Size(value));
+        std::string protoValue(PyBytes_AsString(value), PyBytes_Size(value));
 
       
 
@@ -1593,12 +1590,12 @@ fastpb_convert14(int value)
           value = PyUnicode_AsEncodedString(value, "utf-8", NULL);
         }
 
-        if (! PyString_Check(value)) {
+        if (! PyBytes_Check(value)) {
           PyErr_SetString(PyExc_TypeError, "The source attribute value must be a string");
           return -1;
         }
 
-        std::string protoValue(PyString_AsString(value), PyString_Size(value));
+        std::string protoValue(PyBytes_AsString(value), PyBytes_Size(value));
 
       
 
@@ -1732,8 +1729,7 @@ fastpb_convert14(int value)
 
 
   static PyTypeObject HeaderBlockType = {
-      PyObject_HEAD_INIT(NULL)
-      0,                                      /*ob_size*/
+      PyVarObject_HEAD_INIT(NULL, 0)  /*ob_size*/
       "OSMPBF.HeaderBlock",  /*tp_name*/
       sizeof(HeaderBlock),             /*tp_basicsize*/
       0,                                      /*tp_itemsize*/
@@ -1784,7 +1780,7 @@ fastpb_convert14(int value)
   StringTable_dealloc(StringTable* self)
   {
       delete self->protobuf;
-      self->ob_type->tp_free((PyObject*)self);
+      Py_TYPE(self)->tp_free((PyObject*)self);
   }
 
   static PyObject *
@@ -1804,14 +1800,14 @@ fastpb_convert14(int value)
   {
       std::string result;
       self->protobuf->SerializeToString(&result);
-      return PyString_FromStringAndSize(result.data(), result.length());
+      return PyBytes_FromStringAndSize(result.data(), result.length());
   }
 
 
   static PyObject *
   StringTable_ParseFromString(StringTable* self, PyObject *value)
   {
-      std::string serialized(PyString_AsString(value), PyString_Size(value));
+      std::string serialized(PyBytes_AsString(value), PyBytes_Size(value));
       self->protobuf->ParseFromString(serialized);
       Py_RETURN_NONE;
   }
@@ -1846,7 +1842,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The s attribute value must be a sequence");
           return -1;
         }
@@ -1859,12 +1855,12 @@ fastpb_convert14(int value)
 
       
         // string
-        if (! PyString_Check(value)) {
+        if (! PyBytes_Check(value)) {
           PyErr_SetString(PyExc_TypeError, "The s attribute value must be a string");
           return -1;
         }
 
-        std::string protoValue(PyString_AsString(value), PyString_Size(value));
+        std::string protoValue(PyBytes_AsString(value), PyBytes_Size(value));
 
       
 
@@ -1941,8 +1937,7 @@ fastpb_convert14(int value)
 
 
   static PyTypeObject StringTableType = {
-      PyObject_HEAD_INIT(NULL)
-      0,                                      /*ob_size*/
+      PyVarObject_HEAD_INIT(NULL, 0)  /*ob_size*/
       "OSMPBF.StringTable",  /*tp_name*/
       sizeof(StringTable),             /*tp_basicsize*/
       0,                                      /*tp_itemsize*/
@@ -1993,7 +1988,7 @@ fastpb_convert14(int value)
   Info_dealloc(Info* self)
   {
       delete self->protobuf;
-      self->ob_type->tp_free((PyObject*)self);
+      Py_TYPE(self)->tp_free((PyObject*)self);
   }
 
   static PyObject *
@@ -2013,14 +2008,14 @@ fastpb_convert14(int value)
   {
       std::string result;
       self->protobuf->SerializeToString(&result);
-      return PyString_FromStringAndSize(result.data(), result.length());
+      return PyBytes_FromStringAndSize(result.data(), result.length());
   }
 
 
   static PyObject *
   Info_ParseFromString(Info* self, PyObject *value)
   {
-      std::string serialized(PyString_AsString(value), PyString_Size(value));
+      std::string serialized(PyBytes_AsString(value), PyBytes_Size(value));
       self->protobuf->ParseFromString(serialized);
       Py_RETURN_NONE;
   }
@@ -2060,8 +2055,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int32 protoValue;
 
         // int32
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else {
           PyErr_SetString(PyExc_TypeError,
                           "The version attribute value must be an integer");
@@ -2112,8 +2107,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int64 protoValue;
 
         // int64
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsLongLong(value);
         } else {
@@ -2166,8 +2161,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int64 protoValue;
 
         // int64
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsLongLong(value);
         } else {
@@ -2220,8 +2215,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int32 protoValue;
 
         // int32
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else {
           PyErr_SetString(PyExc_TypeError,
                           "The uid attribute value must be an integer");
@@ -2272,8 +2267,8 @@ fastpb_convert14(int value)
         ::google::protobuf::uint32 protoValue;
 
         // uint32
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsUnsignedLongMask(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsUnsignedLongMask(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsUnsignedLong(value);
         } else {
@@ -2414,8 +2409,7 @@ fastpb_convert14(int value)
 
 
   static PyTypeObject InfoType = {
-      PyObject_HEAD_INIT(NULL)
-      0,                                      /*ob_size*/
+      PyVarObject_HEAD_INIT(NULL, 0)  /*ob_size*/
       "OSMPBF.Info",  /*tp_name*/
       sizeof(Info),             /*tp_basicsize*/
       0,                                      /*tp_itemsize*/
@@ -2466,7 +2460,7 @@ fastpb_convert14(int value)
   DenseInfo_dealloc(DenseInfo* self)
   {
       delete self->protobuf;
-      self->ob_type->tp_free((PyObject*)self);
+      Py_TYPE(self)->tp_free((PyObject*)self);
   }
 
   static PyObject *
@@ -2486,14 +2480,14 @@ fastpb_convert14(int value)
   {
       std::string result;
       self->protobuf->SerializeToString(&result);
-      return PyString_FromStringAndSize(result.data(), result.length());
+      return PyBytes_FromStringAndSize(result.data(), result.length());
   }
 
 
   static PyObject *
   DenseInfo_ParseFromString(DenseInfo* self, PyObject *value)
   {
-      std::string serialized(PyString_AsString(value), PyString_Size(value));
+      std::string serialized(PyBytes_AsString(value), PyBytes_Size(value));
       self->protobuf->ParseFromString(serialized);
       Py_RETURN_NONE;
   }
@@ -2528,7 +2522,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The version attribute value must be a sequence");
           return -1;
         }
@@ -2543,8 +2537,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int32 protoValue;
 
         // int32
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else {
           PyErr_SetString(PyExc_TypeError,
                           "The version attribute value must be an integer");
@@ -2593,7 +2587,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The timestamp attribute value must be a sequence");
           return -1;
         }
@@ -2608,8 +2602,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int64 protoValue;
 
         // int64
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsLongLong(value);
         } else {
@@ -2660,7 +2654,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The changeset attribute value must be a sequence");
           return -1;
         }
@@ -2675,8 +2669,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int64 protoValue;
 
         // int64
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsLongLong(value);
         } else {
@@ -2727,7 +2721,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The uid attribute value must be a sequence");
           return -1;
         }
@@ -2742,8 +2736,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int32 protoValue;
 
         // int32
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else {
           PyErr_SetString(PyExc_TypeError,
                           "The uid attribute value must be an integer");
@@ -2792,7 +2786,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The user_sid attribute value must be a sequence");
           return -1;
         }
@@ -2807,8 +2801,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int32 protoValue;
 
         // int32
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else {
           PyErr_SetString(PyExc_TypeError,
                           "The user_sid attribute value must be an integer");
@@ -2950,8 +2944,7 @@ fastpb_convert14(int value)
 
 
   static PyTypeObject DenseInfoType = {
-      PyObject_HEAD_INIT(NULL)
-      0,                                      /*ob_size*/
+      PyVarObject_HEAD_INIT(NULL, 0)  /*ob_size*/
       "OSMPBF.DenseInfo",  /*tp_name*/
       sizeof(DenseInfo),             /*tp_basicsize*/
       0,                                      /*tp_itemsize*/
@@ -3002,7 +2995,7 @@ fastpb_convert14(int value)
   ChangeSet_dealloc(ChangeSet* self)
   {
       delete self->protobuf;
-      self->ob_type->tp_free((PyObject*)self);
+      Py_TYPE(self)->tp_free((PyObject*)self);
   }
 
   static PyObject *
@@ -3022,14 +3015,14 @@ fastpb_convert14(int value)
   {
       std::string result;
       self->protobuf->SerializeToString(&result);
-      return PyString_FromStringAndSize(result.data(), result.length());
+      return PyBytes_FromStringAndSize(result.data(), result.length());
   }
 
 
   static PyObject *
   ChangeSet_ParseFromString(ChangeSet* self, PyObject *value)
   {
-      std::string serialized(PyString_AsString(value), PyString_Size(value));
+      std::string serialized(PyBytes_AsString(value), PyBytes_Size(value));
       self->protobuf->ParseFromString(serialized);
       Py_RETURN_NONE;
   }
@@ -3069,8 +3062,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int64 protoValue;
 
         // int64
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsLongLong(value);
         } else {
@@ -3151,8 +3144,7 @@ fastpb_convert14(int value)
 
 
   static PyTypeObject ChangeSetType = {
-      PyObject_HEAD_INIT(NULL)
-      0,                                      /*ob_size*/
+      PyVarObject_HEAD_INIT(NULL, 0)  /*ob_size*/
       "OSMPBF.ChangeSet",  /*tp_name*/
       sizeof(ChangeSet),             /*tp_basicsize*/
       0,                                      /*tp_itemsize*/
@@ -3203,7 +3195,7 @@ fastpb_convert14(int value)
   Node_dealloc(Node* self)
   {
       delete self->protobuf;
-      self->ob_type->tp_free((PyObject*)self);
+      Py_TYPE(self)->tp_free((PyObject*)self);
   }
 
   static PyObject *
@@ -3223,14 +3215,14 @@ fastpb_convert14(int value)
   {
       std::string result;
       self->protobuf->SerializeToString(&result);
-      return PyString_FromStringAndSize(result.data(), result.length());
+      return PyBytes_FromStringAndSize(result.data(), result.length());
   }
 
 
   static PyObject *
   Node_ParseFromString(Node* self, PyObject *value)
   {
-      std::string serialized(PyString_AsString(value), PyString_Size(value));
+      std::string serialized(PyBytes_AsString(value), PyBytes_Size(value));
       self->protobuf->ParseFromString(serialized);
       Py_RETURN_NONE;
   }
@@ -3270,8 +3262,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int64 protoValue;
 
         // int64
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsLongLong(value);
         } else {
@@ -3319,7 +3311,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The keys attribute value must be a sequence");
           return -1;
         }
@@ -3334,8 +3326,8 @@ fastpb_convert14(int value)
         ::google::protobuf::uint32 protoValue;
 
         // uint32
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsUnsignedLongMask(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsUnsignedLongMask(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsUnsignedLong(value);
         } else {
@@ -3386,7 +3378,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The vals attribute value must be a sequence");
           return -1;
         }
@@ -3401,8 +3393,8 @@ fastpb_convert14(int value)
         ::google::protobuf::uint32 protoValue;
 
         // uint32
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsUnsignedLongMask(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsUnsignedLongMask(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsUnsignedLong(value);
         } else {
@@ -3513,8 +3505,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int64 protoValue;
 
         // int64
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsLongLong(value);
         } else {
@@ -3567,8 +3559,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int64 protoValue;
 
         // int64
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsLongLong(value);
         } else {
@@ -3724,8 +3716,7 @@ fastpb_convert14(int value)
 
 
   static PyTypeObject NodeType = {
-      PyObject_HEAD_INIT(NULL)
-      0,                                      /*ob_size*/
+      PyVarObject_HEAD_INIT(NULL, 0)  /*ob_size*/
       "OSMPBF.Node",  /*tp_name*/
       sizeof(Node),             /*tp_basicsize*/
       0,                                      /*tp_itemsize*/
@@ -3776,7 +3767,7 @@ fastpb_convert14(int value)
   DenseNodes_dealloc(DenseNodes* self)
   {
       delete self->protobuf;
-      self->ob_type->tp_free((PyObject*)self);
+      Py_TYPE(self)->tp_free((PyObject*)self);
   }
 
   static PyObject *
@@ -3796,14 +3787,14 @@ fastpb_convert14(int value)
   {
       std::string result;
       self->protobuf->SerializeToString(&result);
-      return PyString_FromStringAndSize(result.data(), result.length());
+      return PyBytes_FromStringAndSize(result.data(), result.length());
   }
 
 
   static PyObject *
   DenseNodes_ParseFromString(DenseNodes* self, PyObject *value)
   {
-      std::string serialized(PyString_AsString(value), PyString_Size(value));
+      std::string serialized(PyBytes_AsString(value), PyBytes_Size(value));
       self->protobuf->ParseFromString(serialized);
       Py_RETURN_NONE;
   }
@@ -3838,7 +3829,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The id attribute value must be a sequence");
           return -1;
         }
@@ -3853,8 +3844,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int64 protoValue;
 
         // int64
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsLongLong(value);
         } else {
@@ -3960,7 +3951,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The lat attribute value must be a sequence");
           return -1;
         }
@@ -3975,8 +3966,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int64 protoValue;
 
         // int64
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsLongLong(value);
         } else {
@@ -4027,7 +4018,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The lon attribute value must be a sequence");
           return -1;
         }
@@ -4042,8 +4033,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int64 protoValue;
 
         // int64
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsLongLong(value);
         } else {
@@ -4094,7 +4085,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The keys_vals attribute value must be a sequence");
           return -1;
         }
@@ -4109,8 +4100,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int32 protoValue;
 
         // int32
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else {
           PyErr_SetString(PyExc_TypeError,
                           "The keys_vals attribute value must be an integer");
@@ -4252,8 +4243,7 @@ fastpb_convert14(int value)
 
 
   static PyTypeObject DenseNodesType = {
-      PyObject_HEAD_INIT(NULL)
-      0,                                      /*ob_size*/
+      PyVarObject_HEAD_INIT(NULL, 0)  /*ob_size*/
       "OSMPBF.DenseNodes",  /*tp_name*/
       sizeof(DenseNodes),             /*tp_basicsize*/
       0,                                      /*tp_itemsize*/
@@ -4304,7 +4294,7 @@ fastpb_convert14(int value)
   Way_dealloc(Way* self)
   {
       delete self->protobuf;
-      self->ob_type->tp_free((PyObject*)self);
+      Py_TYPE(self)->tp_free((PyObject*)self);
   }
 
   static PyObject *
@@ -4324,14 +4314,14 @@ fastpb_convert14(int value)
   {
       std::string result;
       self->protobuf->SerializeToString(&result);
-      return PyString_FromStringAndSize(result.data(), result.length());
+      return PyBytes_FromStringAndSize(result.data(), result.length());
   }
 
 
   static PyObject *
   Way_ParseFromString(Way* self, PyObject *value)
   {
-      std::string serialized(PyString_AsString(value), PyString_Size(value));
+      std::string serialized(PyBytes_AsString(value), PyBytes_Size(value));
       self->protobuf->ParseFromString(serialized);
       Py_RETURN_NONE;
   }
@@ -4371,8 +4361,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int64 protoValue;
 
         // int64
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsLongLong(value);
         } else {
@@ -4420,7 +4410,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The keys attribute value must be a sequence");
           return -1;
         }
@@ -4435,8 +4425,8 @@ fastpb_convert14(int value)
         ::google::protobuf::uint32 protoValue;
 
         // uint32
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsUnsignedLongMask(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsUnsignedLongMask(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsUnsignedLong(value);
         } else {
@@ -4487,7 +4477,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The vals attribute value must be a sequence");
           return -1;
         }
@@ -4502,8 +4492,8 @@ fastpb_convert14(int value)
         ::google::protobuf::uint32 protoValue;
 
         // uint32
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsUnsignedLongMask(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsUnsignedLongMask(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsUnsignedLong(value);
         } else {
@@ -4609,7 +4599,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The refs attribute value must be a sequence");
           return -1;
         }
@@ -4624,8 +4614,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int64 protoValue;
 
         // int64
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsLongLong(value);
         } else {
@@ -4769,8 +4759,7 @@ fastpb_convert14(int value)
 
 
   static PyTypeObject WayType = {
-      PyObject_HEAD_INIT(NULL)
-      0,                                      /*ob_size*/
+      PyVarObject_HEAD_INIT(NULL, 0)  /*ob_size*/
       "OSMPBF.Way",  /*tp_name*/
       sizeof(Way),             /*tp_basicsize*/
       0,                                      /*tp_itemsize*/
@@ -4821,7 +4810,7 @@ fastpb_convert14(int value)
   Relation_dealloc(Relation* self)
   {
       delete self->protobuf;
-      self->ob_type->tp_free((PyObject*)self);
+      Py_TYPE(self)->tp_free((PyObject*)self);
   }
 
   static PyObject *
@@ -4841,14 +4830,14 @@ fastpb_convert14(int value)
   {
       std::string result;
       self->protobuf->SerializeToString(&result);
-      return PyString_FromStringAndSize(result.data(), result.length());
+      return PyBytes_FromStringAndSize(result.data(), result.length());
   }
 
 
   static PyObject *
   Relation_ParseFromString(Relation* self, PyObject *value)
   {
-      std::string serialized(PyString_AsString(value), PyString_Size(value));
+      std::string serialized(PyBytes_AsString(value), PyBytes_Size(value));
       self->protobuf->ParseFromString(serialized);
       Py_RETURN_NONE;
   }
@@ -4888,8 +4877,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int64 protoValue;
 
         // int64
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsLongLong(value);
         } else {
@@ -4937,7 +4926,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The keys attribute value must be a sequence");
           return -1;
         }
@@ -4952,8 +4941,8 @@ fastpb_convert14(int value)
         ::google::protobuf::uint32 protoValue;
 
         // uint32
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsUnsignedLongMask(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsUnsignedLongMask(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsUnsignedLong(value);
         } else {
@@ -5004,7 +4993,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The vals attribute value must be a sequence");
           return -1;
         }
@@ -5019,8 +5008,8 @@ fastpb_convert14(int value)
         ::google::protobuf::uint32 protoValue;
 
         // uint32
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsUnsignedLongMask(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsUnsignedLongMask(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsUnsignedLong(value);
         } else {
@@ -5126,7 +5115,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The roles_sid attribute value must be a sequence");
           return -1;
         }
@@ -5141,8 +5130,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int32 protoValue;
 
         // int32
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else {
           PyErr_SetString(PyExc_TypeError,
                           "The roles_sid attribute value must be an integer");
@@ -5191,7 +5180,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The memids attribute value must be a sequence");
           return -1;
         }
@@ -5206,8 +5195,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int64 protoValue;
 
         // int64
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsLongLong(value);
         } else {
@@ -5258,7 +5247,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The types attribute value must be a sequence");
           return -1;
         }
@@ -5274,8 +5263,8 @@ fastpb_convert14(int value)
         ::OSMPBF::Relation::MemberType protoValue;
 
         // int32
-        if (PyInt_Check(value)) {
-          protoValue = (::OSMPBF::Relation::MemberType) PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = (::OSMPBF::Relation::MemberType) PyLong_AsLong(value);
         } else {
           PyErr_SetString(PyExc_TypeError,
                           "The types attribute value must be an integer");
@@ -5447,8 +5436,7 @@ fastpb_convert14(int value)
 
 
   static PyTypeObject RelationType = {
-      PyObject_HEAD_INIT(NULL)
-      0,                                      /*ob_size*/
+      PyVarObject_HEAD_INIT(NULL, 0)  /*ob_size*/
       "OSMPBF.Relation",  /*tp_name*/
       sizeof(Relation),             /*tp_basicsize*/
       0,                                      /*tp_itemsize*/
@@ -5499,7 +5487,7 @@ fastpb_convert14(int value)
   PrimitiveGroup_dealloc(PrimitiveGroup* self)
   {
       delete self->protobuf;
-      self->ob_type->tp_free((PyObject*)self);
+      Py_TYPE(self)->tp_free((PyObject*)self);
   }
 
   static PyObject *
@@ -5519,14 +5507,14 @@ fastpb_convert14(int value)
   {
       std::string result;
       self->protobuf->SerializeToString(&result);
-      return PyString_FromStringAndSize(result.data(), result.length());
+      return PyBytes_FromStringAndSize(result.data(), result.length());
   }
 
 
   static PyObject *
   PrimitiveGroup_ParseFromString(PrimitiveGroup* self, PyObject *value)
   {
-      std::string serialized(PyString_AsString(value), PyString_Size(value));
+      std::string serialized(PyBytes_AsString(value), PyBytes_Size(value));
       self->protobuf->ParseFromString(serialized);
       Py_RETURN_NONE;
   }
@@ -5570,7 +5558,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The nodes attribute value must be a sequence");
           return -1;
         }
@@ -5693,7 +5681,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The ways attribute value must be a sequence");
           return -1;
         }
@@ -5761,7 +5749,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The relations attribute value must be a sequence");
           return -1;
         }
@@ -5829,7 +5817,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The changesets attribute value must be a sequence");
           return -1;
         }
@@ -5981,8 +5969,7 @@ fastpb_convert14(int value)
 
 
   static PyTypeObject PrimitiveGroupType = {
-      PyObject_HEAD_INIT(NULL)
-      0,                                      /*ob_size*/
+      PyVarObject_HEAD_INIT(NULL, 0)  /*ob_size*/
       "OSMPBF.PrimitiveGroup",  /*tp_name*/
       sizeof(PrimitiveGroup),             /*tp_basicsize*/
       0,                                      /*tp_itemsize*/
@@ -6033,7 +6020,7 @@ fastpb_convert14(int value)
   PrimitiveBlock_dealloc(PrimitiveBlock* self)
   {
       delete self->protobuf;
-      self->ob_type->tp_free((PyObject*)self);
+      Py_TYPE(self)->tp_free((PyObject*)self);
   }
 
   static PyObject *
@@ -6053,14 +6040,14 @@ fastpb_convert14(int value)
   {
       std::string result;
       self->protobuf->SerializeToString(&result);
-      return PyString_FromStringAndSize(result.data(), result.length());
+      return PyBytes_FromStringAndSize(result.data(), result.length());
   }
 
 
   static PyObject *
   PrimitiveBlock_ParseFromString(PrimitiveBlock* self, PyObject *value)
   {
-      std::string serialized(PyString_AsString(value), PyString_Size(value));
+      std::string serialized(PyBytes_AsString(value), PyBytes_Size(value));
       self->protobuf->ParseFromString(serialized);
       Py_RETURN_NONE;
   }
@@ -6159,7 +6146,7 @@ fastpb_convert14(int value)
       }
 
       
-        if (PyString_Check(input)) {
+        if (PyBytes_Check(input)) {
           PyErr_SetString(PyExc_TypeError, "The primitivegroup attribute value must be a sequence");
           return -1;
         }
@@ -6223,8 +6210,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int32 protoValue;
 
         // int32
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else {
           PyErr_SetString(PyExc_TypeError,
                           "The granularity attribute value must be an integer");
@@ -6275,8 +6262,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int64 protoValue;
 
         // int64
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsLongLong(value);
         } else {
@@ -6329,8 +6316,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int64 protoValue;
 
         // int64
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else if (PyLong_Check(value)) {
           protoValue = PyLong_AsLongLong(value);
         } else {
@@ -6383,8 +6370,8 @@ fastpb_convert14(int value)
         ::google::protobuf::int32 protoValue;
 
         // int32
-        if (PyInt_Check(value)) {
-          protoValue = PyInt_AsLong(value);
+        if (PyLong_Check(value)) {
+          protoValue = PyLong_AsLong(value);
         } else {
           PyErr_SetString(PyExc_TypeError,
                           "The date_granularity attribute value must be an integer");
@@ -6538,8 +6525,7 @@ fastpb_convert14(int value)
 
 
   static PyTypeObject PrimitiveBlockType = {
-      PyObject_HEAD_INIT(NULL)
-      0,                                      /*ob_size*/
+      PyVarObject_HEAD_INIT(NULL, 0)  /*ob_size*/
       "OSMPBF.PrimitiveBlock",  /*tp_name*/
       sizeof(PrimitiveBlock),             /*tp_basicsize*/
       0,                                      /*tp_itemsize*/
@@ -6589,7 +6575,7 @@ static PyMethodDef module_methods[] = {
 #define PyMODINIT_FUNC void
 #endif
 PyMODINIT_FUNC
-initOSMPBF(void)
+PyInit_OSMPBF(void)
 {
     GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -6599,53 +6585,63 @@ initOSMPBF(void)
 
     
       if (PyType_Ready(&BlobType) < 0)
-          return;
+          return NULL;
     
       if (PyType_Ready(&BlobHeaderType) < 0)
-          return;
+          return NULL;
     
       if (PyType_Ready(&HeaderBBoxType) < 0)
-          return;
+          return NULL;
     
       if (PyType_Ready(&HeaderBlockType) < 0)
-          return;
+          return NULL;
     
       if (PyType_Ready(&StringTableType) < 0)
-          return;
+          return NULL;
     
       if (PyType_Ready(&InfoType) < 0)
-          return;
+          return NULL;
     
       if (PyType_Ready(&DenseInfoType) < 0)
-          return;
+          return NULL;
     
       if (PyType_Ready(&ChangeSetType) < 0)
-          return;
+          return NULL;
     
       if (PyType_Ready(&NodeType) < 0)
-          return;
+          return NULL;
     
       if (PyType_Ready(&DenseNodesType) < 0)
-          return;
+          return NULL;
     
       if (PyType_Ready(&WayType) < 0)
-          return;
+          return NULL;
     
       if (PyType_Ready(&RelationType) < 0)
-          return;
+          return NULL;
     
       if (PyType_Ready(&PrimitiveGroupType) < 0)
-          return;
+          return NULL;
     
       if (PyType_Ready(&PrimitiveBlockType) < 0)
-          return;
+          return NULL;
     
 
-    m = Py_InitModule3("OSMPBF", module_methods,
-                       "");
+      static struct PyModuleDef moduledef = {
+          PyModuleDef_HEAD_INIT,
+          "OSMPBF",     /* m_name */
+          "",  /* m_doc */
+          -1,                  /* m_size */
+          module_methods,    /* m_methods */
+          NULL,                /* m_reload */
+          NULL,                /* m_traverse */
+          NULL,                /* m_clear */
+          NULL,                /* m_free */
+      };
+      m = PyModule_Create(&moduledef);
 
     if (m == NULL)
-      return;
+      return NULL;
 
     
 
@@ -6691,5 +6687,6 @@ initOSMPBF(void)
     
       Py_INCREF(&PrimitiveBlockType);
       PyModule_AddObject(m, "PrimitiveBlock", (PyObject *)&PrimitiveBlockType);
-    
+
+      return m;
 }

@@ -16,7 +16,7 @@ import mmap
 import multiprocessing
 import re
 
-from Queue import Empty
+from queue import Empty
 
 from imposm.parser.xml.parser import XMLParser
 from imposm.parser.util import setproctitle
@@ -94,7 +94,7 @@ class XMLMultiProcParser(object):
     def parse(self, stream):
         assert not self.pool
 
-        for _ in xrange(self.pool_size):
+        for _ in range(self.pool_size):
             proc = XMLParserProcess(self.mmap_pool, self.mmap_queue, nodes_callback=self.nodes_callback,
                 coords_callback=self.coords_callback, ways_callback=self.ways_callback,
                 relations_callback=self.relations_callback,
@@ -183,19 +183,19 @@ class XMLChunker(object):
 
     def _skip_header(self):
         for line in self.stream:
-            if line.lstrip().startswith('<node '):
+            if line.lstrip().startswith(b'<node '):
                 self._last_line = line
                 return
 
     def _new_xml_outstream(self):
         self.current_mmap_idx, stream = self.mmap_pool.new()
         stream.seek(0)
-        stream.write("<osm xmlns:xapi='http://www.informationfreeway.org/xapi/0.6'>")
+        stream.write(b"<osm xmlns:xapi='http://www.informationfreeway.org/xapi/0.6'>")
         return stream
 
     def _finished_xml_outstream(self, last_line, stream):
-        if '</osm' not in last_line:
-            stream.write('</osm>\n')
+        if b'</osm' not in last_line:
+            stream.write(b'</osm>\n')
         return self.current_mmap_idx, stream.tell()
 
     def read(self, mmaps_queue, coords_callback=None):
@@ -205,9 +205,9 @@ class XMLChunker(object):
         coord_node_match = None
         xml_nodes = self._new_xml_outstream()
         coords = []
-        coord_node_re_match = re.compile(r'^\s*<node id="(\d+)" .*lat="([-0-9.]+)" '
-                                          'lon="([-0-9.]+)".*/>').match
-        node_re_match = re.compile(r'^\s*<node .*/>').match
+        coord_node_re_match = re.compile(br'^\s*<node id="(\d+)" .*lat="([-0-9.]+)" '
+                                         br'lon="([-0-9.]+)".*/>').match
+        node_re_match = re.compile(br'^\s*<node .*/>').match
         xml_nodes.write(self._last_line)
         split = False
         line = ''
@@ -225,7 +225,7 @@ class XMLChunker(object):
             else:
                 xml_nodes.write(line)
             if split:
-                if (line.rstrip().endswith(('</way>', '</node>', '</relation>'))
+                if (line.rstrip().endswith((b'</way>', b'</node>', b'</relation>'))
                     or (coords_callback and coord_node_match)
                     or (not coords_callback and node_re_match(line))):
                     mmaps_queue.put(self._finished_xml_outstream(line, xml_nodes))
@@ -239,7 +239,7 @@ class XMLChunker(object):
         # we are at the end of the stream and assume we wrote the end tag
         # to xml_nodes. we set line to closing tag here to avoid additional
         # end tag in case the last line(s) is blank
-        line = '</osm'
+        line = b'</osm'
         mmaps_queue.put(self._finished_xml_outstream(line, xml_nodes))
 
 if __name__ == '__main__':
@@ -256,7 +256,7 @@ if __name__ == '__main__':
                     break
                 count += len(nodes)
                 queue.task_done()
-            print type, count
+            print(type, count)
         return count
 
 
